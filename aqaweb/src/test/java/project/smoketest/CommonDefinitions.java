@@ -1,0 +1,49 @@
+package project.smoketest;
+
+import org.junit.Assert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import project.Environment;
+import project.Utility;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Properties;
+
+public class CommonDefinitions {
+    public static final String SCREENSHOTS_PATH = "./test-logs";
+
+    public static WebDriver driver = null;
+    public static Environment environment = Environment.newInstance("project/context.json");
+
+    public void wait10AndClick(String xpath) {
+        WebDriverWait waiter = new WebDriverWait(driver, 10);
+        waiter.until(ExpectedConditions.elementToBeClickable(By.xpath(xpath)));
+        driver.findElement(By.xpath(xpath)).click();
+    }
+
+    public void wait10AndType(String xpathForStatedTextBox, String stringToType) {
+        WebDriverWait waiter = new WebDriverWait(driver, 10);
+        waiter.until(ExpectedConditions
+                .elementToBeClickable(By.xpath(xpathForStatedTextBox)));
+        WebElement statedTextBox = findElementByXPath(xpathForStatedTextBox);
+        Assert.assertNotNull(statedTextBox);
+        statedTextBox.sendKeys(stringToType);
+    }
+
+
+    public WebElement findElementByXPath(String xPathToSearchFor) {
+        try {
+            return driver.findElement(By.xpath(xPathToSearchFor));
+        } catch (NoSuchElementException e) {
+            return null;
+        }
+    }
+}
